@@ -99,7 +99,7 @@ class Pattern
     hashIndex = name.indexOf('#')
     if hashIndex is 0
       rule = @grammar.getRepository()[name[1..]]
-      if not repo?
+      if not rule?
         rule = @repository?[name[1..]]
       rule
     else if hashIndex >= 1
