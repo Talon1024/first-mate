@@ -231,7 +231,7 @@ class Grammar
 
   createRule: (options) -> new Rule(this, @registry, options)
 
-  createPattern: (options) -> new Pattern(this, @registry, options)
+  createPattern: (options, parentRule=null) -> new Pattern(this, @registry, parentRule, options)
 
   getMaxTokensPerLine: ->
     @maxTokensPerLine
