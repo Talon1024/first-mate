@@ -7,7 +7,7 @@ class Rule
   constructor: (@grammar, @registry, {@scopeName, @contentScopeName, patterns, @endPattern, @applyEndPatternLast}={}) ->
     @patterns = []
     for pattern in patterns ? []
-      @patterns.push(@grammar.createPattern(pattern)) unless pattern.disabled
+      @patterns.push(@grammar.createPattern(pattern, this)) unless pattern.disabled
 
     if @endPattern and not @endPattern.hasBackReferences
       if @applyEndPatternLast
