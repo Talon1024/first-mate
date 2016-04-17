@@ -99,7 +99,7 @@ class Pattern
     if hashIndex is 0
       rule = @grammar.getRepository()[name[1..]]
       if not rule?
-        rule = @getRepository()?[name[1..]]
+        rule = @parentRule.getRepository()[name[1..]]
       rule
     else if hashIndex >= 1
       grammarName = name[0..hashIndex-1]

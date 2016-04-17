@@ -4,8 +4,9 @@ Scanner = require './scanner'
 
 module.exports =
 class Rule
-  constructor: (@grammar, @registry, {@scopeName, @contentScopeName, patterns, @endPattern, @applyEndPatternLast}={}) ->
+  constructor: (@grammar, @registry, {@scopeName, @contentScopeName, patterns, repository, @endPattern, @applyEndPatternLast}={}) ->
     @patterns = []
+    @rawRepository = repository
     for pattern in patterns ? []
       @patterns.push(@grammar.createPattern(pattern, this)) unless pattern.disabled
 
@@ -101,3 +102,13 @@ class Rule
       rule
     else
       this
+
+  createRule: (options) -> new Rule @grammar, @registry, options
+
+  getRepository: ->
+    @repository ?= do =>
+      repository = {}
+      for name, data of @rawRepository
+        data = {patterns: [data], tempName: name} if data.begin? or data.match?
+        repository[name] = @createRule(data)
+      repository
