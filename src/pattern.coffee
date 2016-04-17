@@ -6,8 +6,8 @@ DigitRegex = /\\\d+/
 
 module.exports =
 class Pattern
-  constructor: (@grammar, @registry, options={}) ->
-    {name, contentName, match, begin, end, patterns, repository} = options
+  constructor: (@grammar, @registry, @parentRule, options={}) ->
+    {name, contentName, match, begin, end, patterns} = options
     {captures, beginCaptures, endCaptures, applyEndPatternLast} = options
     {@include, @popRule, @hasBackReferences} = options
 
@@ -15,7 +15,6 @@ class Pattern
     @backReferences = null
     @scopeName = name
     @contentScopeName = contentName
-    @repository = repository
 
     if match
       if (end or @popRule) and @hasBackReferences ?= DigitRegex.test(match)
@@ -100,7 +99,7 @@ class Pattern
     if hashIndex is 0
       rule = @grammar.getRepository()[name[1..]]
       if not rule?
-        rule = @repository?[name[1..]]
+        rule = @getRepository()?[name[1..]]
       rule
     else if hashIndex >= 1
       grammarName = name[0..hashIndex-1]
