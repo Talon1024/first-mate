@@ -6,7 +6,7 @@ DigitRegex = /\\\d+/
 
 module.exports =
 class Pattern
-  constructor: (@grammar, @registry, @parentRule, options={}) ->
+  constructor: (@grammar, @registry, @parentRule=null, options={}) ->
     {name, contentName, match, begin, end, patterns} = options
     {captures, beginCaptures, endCaptures, applyEndPatternLast} = options
     {@include, @popRule, @hasBackReferences} = options
