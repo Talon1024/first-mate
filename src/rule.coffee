@@ -1,12 +1,16 @@
 _ = require 'underscore-plus'
 
 Scanner = require './scanner'
+util = require 'util'
 
 module.exports =
 class Rule
   constructor: (@grammar, @registry, {@scopeName, @contentScopeName, patterns, repository, @endPattern, @applyEndPatternLast}={}) ->
     @patterns = []
-    @rawRepository = repository
+    @rawRepository = Object.assign {}, repository if repository?
+    @repository = @getRepository() if repository?
+    console.log "rawRepository: #{util.inspect @rawRepository, depth: 3, colors: true}" if repository?
+
     for pattern in patterns ? []
       @patterns.push(@grammar.createPattern(pattern, this)) unless pattern.disabled
 
@@ -103,12 +107,15 @@ class Rule
     else
       this
 
-  createRule: (options) -> new Rule @grammar, @registry, options
-
   getRepository: ->
+    console.log "getRepository called."
+    console.log "repository: #{@repository}"
     @repository ?= do =>
+      console.log "rawRepository: #{@rawRepository}"
       repository = {}
       for name, data of @rawRepository
         data = {patterns: [data], tempName: name} if data.begin? or data.match?
-        repository[name] = @createRule(data)
+        repository[name] = @grammar.createRule(data)
+        console.log "name: #{name}, data: #{data}"
+      console.log "repository: #{repository}"
       repository

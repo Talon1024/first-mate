@@ -99,7 +99,9 @@ class Pattern
     if hashIndex is 0
       rule = @grammar.getRepository()[name[1..]]
       if not rule?
+        console.log "Calling @parentRule.getRepository() for \##{name[1..]}"
         rule = @parentRule.getRepository()[name[1..]]
+        console.log "rule: #{rule}"
       rule
     else if hashIndex >= 1
       grammarName = name[0..hashIndex-1]
